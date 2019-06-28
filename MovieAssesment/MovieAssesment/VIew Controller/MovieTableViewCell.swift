@@ -16,9 +16,8 @@ class MovieTableViewCell: UITableViewCell {
     
     @IBOutlet weak var movieRatingText: UILabel!
     
-    @IBOutlet weak var movieSummaryText: UITextView!
+    @IBOutlet weak var movieSummaryText: UILabel!
     
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

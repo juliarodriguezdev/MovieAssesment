@@ -12,12 +12,12 @@ class MovieController {
     
 // json url file to decode data
 //https://api.themoviedb.org/3/search/movie?api_key=a5cd402718fc47c098a296dd7eb9c4dd&query=jaws
-///l1yltvzILaZcx2jYvc5sEMkM7Eh.jpg
+
     static let baseURL = URL(string: "https://api.themoviedb.org/3/search/movie")
     
-    static let imageBaseURL = URL(string: "http://image.tmdb.org/t/p/w185")
+    static let imageBaseURL = URL(string: "https://image.tmdb.org/t/p/w185")
     
-    // Create function to fetch movies, with completion handler
+    // Create function to fetch movies, with completion handler: []
     static func fetchMovieItem(movie: String, completion: @escaping ([Movie]?) -> Void) {
         
         // unwrap url
@@ -37,6 +37,7 @@ class MovieController {
         // create a constant for finalURL
         guard let finalURL = components?.url else { completion(nil); return}
         print(finalURL)
+        
         // Create URLSession
         URLSession.shared.dataTask(with: finalURL) { (data, _, error) in
             if let error = error {
@@ -59,19 +60,32 @@ class MovieController {
         }.resume()
         
     }
+    // completion handler: UIImage
         static func fetchMovieImage(movie: Movie, completion: @escaping (UIImage?) -> Void) {
             
-            guard let url = imageBaseURL else { completion(nil); return}
+            guard var url = imageBaseURL else { completion(nil); return}
             
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: true)
+            // In Model declared image? unwrap it to utilize it
+            guard let imagePath = movie.imagePath else { return }
             
-            let imageComponent = URLComponents(string: movie.imagePath)
+            url.appendPathComponent(imagePath)
             
-            guard let imageURL = components?.url else { completion(nil); return}
+            URLSession.shared.dataTask(with: url) { (data, _, error) in
+                
+                if let error = error {
+                    print("There was an error grabbing data: \(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+                guard let data = data else {
+                    print("there was an error with the data")
+                    completion(nil)
+                    return }
+                
+                let image = UIImage(data: data)
+                completion(image)
+                
+                }.resume()
+            }
             
-
-        }
-
-    
-
 }

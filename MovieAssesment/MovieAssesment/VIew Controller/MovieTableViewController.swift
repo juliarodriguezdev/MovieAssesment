@@ -19,8 +19,6 @@ class MovieTableViewController: UITableViewController {
 
     }
 
-    // MARK: - Table view data source
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return movie.count
@@ -33,9 +31,14 @@ class MovieTableViewController: UITableViewController {
         let movieItem = movie[indexPath.row]
         
         cell.movieLabelText.text = movieItem.title
-        cell.movieRatingText.text = movieItem.rating
+        cell.movieRatingText.text = "\(movieItem.rating)"
         cell.movieSummaryText.text = movieItem.overview
-        cell.movieImage.image = UIImage(contentsOfFile: movieItem.imagePath)
+        
+        MovieController.fetchMovieImage(movie: movieItem) { (image) in
+             DispatchQueue.main.async {
+                cell.movieImage.image = image
+            }
+        }
         
         return cell
     }

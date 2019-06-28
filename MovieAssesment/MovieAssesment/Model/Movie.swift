@@ -14,22 +14,15 @@ struct TopLevelJSON: Codable {
 struct Movie: Codable {
     
     let title: String
-    let rating: String
+    let rating: Double
     let overview: String
-    let imagePath: String
-    let movieID: String
+    let imagePath: String?
     
     enum CodingKeys: String, CodingKey {
         case title
         case rating = "vote_average"
         case overview
         case imagePath = "poster_path"
-        case movieID = "movie_id"
     }
 }
 
-
-
-
-// Image: /size/file_path
-// https://image.tmdb.org/t/p/original/wwemzKWzjKYJFfCeiB57q3r4Bcm.svg
